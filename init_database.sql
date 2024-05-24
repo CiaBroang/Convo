@@ -20,7 +20,7 @@ CREATE TABLE messages (
 );
 
 INSERT INTO users (email, password, username, name, is_online)
-VALUES ('johndoe@example.com', 'password123', 'johndoe', 'John Doe',  FALSE);
+VALUES ('johndoe@example.com', 'password123', 'johndoe', 'John Doe', FALSE);
 
 INSERT INTO messages (sender_id, receiver_id, message_text)
 VALUES (1, 2, 'Hello, this is a test message!');
