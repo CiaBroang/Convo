@@ -15,25 +15,32 @@ client.connect().catch((err) => {
 });
 
 const app = express(); //ny instans av express-applikationen
-
 app.use(cors()); //förhindra CORS-fel
 app.use(bodyParser.json());
 
-app.get("/", async (_req: Request, res: Response) => {
+app.get("/fetchConversation", async (req: Request, res: Response) => {
+  const { person1, person2 } = req.query;
+
+  console.log("SQL query:", "SELECT * FROM messages WHERE (sender_id=$1 AND receiver_id=$2) OR (sender_id=$2 AND receiver_id=$1)", [person1, person2]);
   try {
-    const pgRes = await client.query("SELECT * FROM messages");
+    const pgRes = await client.query(
+      "SELECT * FROM messages WHERE (sender_id=$1 AND receiver_id=$2) OR (sender_id=$2 AND receiver_id=$1)",
+      [person1, person2]
+    );
+
     const { rows } = pgRes;
     res.send(rows);
-  } catch (err) {
-    if (err instanceof Error) {
-      console.error("Error executing query", err.message);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error executing query", error.message);
       res.status(500).send("Internal Server Error");
     } else {
-      console.error("Unknown error", err);
+      console.error("Unknown error", error);
       res.status(500).send("Internal Server Error");
     }
   }
 });
+
 
 app.post("/messages", async (req: Request, res: Response) => {
   const { sender_id, receiver_id, message_text, message_image, message_gif } = req.body;
