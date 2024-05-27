@@ -4,6 +4,7 @@ import dotenv from "dotenv"; //hantera miljövariabler från .env-filen
 import { Client } from "pg"; //skapar en PostgreSQL-klient
 import bodyParser from "body-parser" //hantera POST-data
 
+
 dotenv.config(); // Läs in konfigurationen från .env-filen och gör den tillgänglig via process.env
 
 const client = new Client({ //// Skapa en ny instans av en PostgreSQL-klient med anslutningssträngen från .env-filen
@@ -66,6 +67,34 @@ app.post("/messages", async (req: Request, res: Response) => {
     }
   }
 });
+
+
+app.post("/addUsers", async (req: Request, res: Response) => {
+  const { email, password, username } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).send("email and password are required");
+  }
+  // Validera för att meddelandet innehåller någonting!
+
+  try {
+    await client.query(
+      "INSERT INTO users (email, password, username) VALUES ($1, $2, $3)",
+      [email, password, username]
+    );
+    res.status(201).send("User added");
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error("Error adding user ", err.message);
+      res.status(500).send("Internal Server Error");
+    } else {
+      console.error("Unknown error", err);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+});
+
+
 
 app.listen(8000, () => {
   console.log("Server is running on http://localhost:8000");

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ChatBubble from "./ChatBubble";
 import "./ChatWindow.css";
-import { response } from "express";
-
+// import express, { Request, Response } from "express";
 
 interface Message {
   message_id: number;
@@ -20,7 +19,7 @@ const ChatWindow: React.FC = () => {
   const receiverId = 2;
 
   const [messages, setMessages] = useState<
-    { message: string; sender: "user" | "receiver" }[]
+    { message: string; sender: "user" | "receiver"; timestamp: string }[]
   >([]);
 
   const [newMessage, setNewMessage] = useState<string>(""); //State-variabeln (newMessage): Håller en sträng som representerar det aktuella textinnehållet i ett inputfält.Setter-funktionen (setNewMessage): Uppdaterar newMessage när användaren skriver in text i inputfältet.
@@ -83,7 +82,7 @@ const ChatWindow: React.FC = () => {
       }),
     });
     if (response.ok) {
-      setMessages([...messages, { message: newMessage, sender: "user", }]); // Lös så att timestamp också visas upp. Spridningsoperatorn (...messages) används för att kopiera alla befintliga meddelanden i messages-arrayen och lägga till ett nytt objektt
+      setMessages([...messages, { message: newMessage, sender: "user", timestamp: ""}]); // Lös så att timestamp också visas upp. Spridningsoperatorn (...messages) används för att kopiera alla befintliga meddelanden i messages-arrayen och lägga till ett nytt objektt
       setNewMessage(""); //återställ inputfältet
     } else {
       // Visa error för användare!
