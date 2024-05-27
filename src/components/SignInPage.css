@@ -1,7 +1,7 @@
 body, html {
     height: 100%;
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
   }
   
   .container {
@@ -24,9 +24,10 @@ body, html {
     width: 100%;
     padding: 12px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 2px solid #212121;
     border-radius: 4px;
     box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
   }
   
   .button {
@@ -39,6 +40,8 @@ body, html {
     border-radius: 4px;
     cursor: pointer;
     text-align: center;
+    letter-spacing: 2px;
+    font-family: 'Poppins', sans-serif;
   }
   
   .button:hover {
