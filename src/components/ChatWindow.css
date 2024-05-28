@@ -1,42 +1,197 @@
+/* 
 .chat-window {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    width: 400px;
-    margin: 0 auto;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    font-family: 'Poppins', sans-serif;
-  }
-  
-  .chat-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    overflow-y: auto;
-    background-color: #fafafa;
-  }
-  
-  .chat-input {
-    display: flex;
-    padding: 10px;
-    border-top: 1px solid #ccc;
-  }
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 400px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-family: "Poppins", sans-serif;
+}
 
-  .chat-input input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 10px;
-  }
-  
-  .chat-input button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #212121;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ccc;
+}
+
+.back-icon {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.chat-header-details {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #bbb;
+  margin-right: 10px;
+  margin-left: 20px;
+}
+
+.chat-username {
+  font-size: 18px;
+  font-family: "Poppins", sans-serif;
+  /* font-weight: bold; */
+/* }
+
+.chat-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  overflow-y: auto;
+  background-color: #ffffff;
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-family: "Poppins", sans-serif;
+}
+
+.chat-input button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #212121;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  letter-spacing: 1;
+  font-family: "Poppins", sans-serif;
+}
+
+.chat-bubble {
+  max-width: 80%;
+  margin-bottom: 10px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f1f1f1;
+} */
+
+/* Lägg till fler react-icons */
+/* Fixa scrollen så headern inte rör på sig och det senaste meddelandet syns direkt när det skickats */
+
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 400px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-family: "Poppins", sans-serif;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ccc;
+}
+
+.back-icon {
+  font-size: 24px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.chat-header-details {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.avatar-container {
+  position: relative;
+  margin-right: 10px;
+  margin-left: 20px;
+}
+
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #bbb;
+}
+
+.active-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #37C882;
+  border: 2px solid white;
+}
+
+.chat-username {
+  font-size: 18px;
+  font-family: "Poppins", sans-serif;
+}
+
+.chat-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  overflow-y: auto;
+  background-color: #ffffff;
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.chat-input textarea {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-family: "Poppins", sans-serif;
+  resize: none;
+}
+
+.chat-input button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #212121;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  letter-spacing: 1px;
+  font-family: "Poppins", sans-serif;
+}
+
+.chat-bubble {
+  max-width: 80%;
+  margin-bottom: 10px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f1f1f1;
+}
