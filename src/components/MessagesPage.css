@@ -26,12 +26,12 @@
     justify-content: center;
     padding: 10px;
     background-color: #ffffff;
-    position: relative; /* Add relative positioning */
+    position: relative;
   }
   
   .search-bar input {
     flex: 1;
-    padding: 10px 10px 10px 40px; /* Add padding to make room for the icon */
+    padding: 10px 10px 10px 40px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
@@ -59,6 +59,13 @@
     align-items: center;
     padding: 20px;
     border-bottom: 1px solid #f1f1f1;
+  }
+
+  .sent-at {
+    right: 10px;
+    top: 10px;
+    color: #999;
+    font-size: 0.85em;
   }
   
   .avatar-circle {
