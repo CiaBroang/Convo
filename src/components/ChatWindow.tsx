@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ChatBubble from "./ChatBubble";
 import "./ChatWindow.css";
+import { FaArrowLeftLong } from "react-icons/fa6";
 // import express, { Request, Response } from "express";
 
 interface Message {
@@ -38,7 +39,7 @@ const ChatWindow: React.FC = () => {
               "Content-Type": "application/json",
             },
             redirect: "follow",
-            referrerPolicy: "no-referrer"
+            referrerPolicy: "no-referrer",
           }
         );
         if (response.ok) {
@@ -82,7 +83,10 @@ const ChatWindow: React.FC = () => {
       }),
     });
     if (response.ok) {
-      setMessages([...messages, { message: newMessage, sender: "user", timestamp: ""}]); // Lös så att timestamp också visas upp. Spridningsoperatorn (...messages) används för att kopiera alla befintliga meddelanden i messages-arrayen och lägga till ett nytt objektt
+      setMessages([
+        ...messages,
+        { message: newMessage, sender: "user", timestamp: "" },
+      ]); // Lös så att timestamp också visas upp. Spridningsoperatorn (...messages) används för att kopiera alla befintliga meddelanden i messages-arrayen och lägga till ett nytt objektt
       setNewMessage(""); //återställ inputfältet
     } else {
       // Visa error för användare!
@@ -94,6 +98,16 @@ const ChatWindow: React.FC = () => {
 
   return (
     <div className="chat-window">
+      <div className="chat-header">
+      <FaArrowLeftLong className="back-icon" />
+        <div className="chat-header-details">
+          <div className="avatar-container">
+            <div className="avatar-circle"></div>
+            <div className="active-badge"></div>
+          </div>
+          <span className="chat-username">Cia Broang</span>
+        </div>
+      </div>
       <div className="chat-content">
         {messages.map((msg, index) => (
           // <ChatBubble key={index} message={msg.message} isSender={msg.sender === senderId} sender={msg.sender}
@@ -101,11 +115,10 @@ const ChatWindow: React.FC = () => {
         ))}
       </div>
       <div className="chat-input">
-        <input
-          type="text"
+        <textarea
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Type a message..."
+          placeholder="Type your message"
         />
         <button onClick={handleSend}>Send</button>
       </div>
