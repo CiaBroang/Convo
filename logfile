@@ -1,0 +1,24 @@
+2024-05-30 15:05:26.472 CEST [7984] LOG:  starting PostgreSQL 16.3 (Homebrew) on x86_64-apple-darwin23.4.0, compiled by Apple clang version 15.0.0 (clang-1500.3.9.4), 64-bit
+2024-05-30 15:05:26.475 CEST [7984] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2024-05-30 15:05:26.475 CEST [7984] LOG:  listening on IPv6 address "::1", port 5432
+2024-05-30 15:05:26.476 CEST [7984] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2024-05-30 15:05:26.482 CEST [7987] LOG:  database system was shut down at 2024-05-30 15:04:57 CEST
+2024-05-30 15:05:26.489 CEST [7984] LOG:  database system is ready to accept connections
+2024-05-30 15:05:38.593 CEST [8004] FATAL:  role "postgres" does not exist
+2024-05-30 15:07:37.632 CEST [8090] FATAL:  role "postgres" does not exist
+2024-05-30 15:10:26.467 CEST [7985] LOG:  checkpoint starting: time
+2024-05-30 15:10:30.706 CEST [7985] LOG:  checkpoint complete: wrote 45 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.234 s, sync=0.002 s, total=4.240 s; sync files=11, longest=0.001 s, average=0.001 s; distance=269 kB, estimate=269 kB; lsn=0/154F128, redo lsn=0/154F0F0
+2024-05-30 15:11:36.200 CEST [8154] FATAL:  role "postgres" does not exist
+2024-05-30 15:16:58.606 CEST [8273] FATAL:  role "postgres" does not exist
+2024-05-30 15:17:03.035 CEST [8274] FATAL:  role "postgres" does not exist
+2024-05-30 15:17:23.221 CEST [8283] FATAL:  role "postgres" does not exist
+2024-05-30 15:26:33.505 CEST [8443] FATAL:  role "postgres" does not exist
+2024-05-30 15:26:51.731 CEST [8449] FATAL:  role "postgres" does not exist
+2024-05-30 15:27:24.992 CEST [8519] FATAL:  role "postgres" does not exist
+2024-05-30 15:27:36.925 CEST [8522] FATAL:  role "postgres" does not exist
+2024-05-30 15:28:57.312 CEST [7984] LOG:  received smart shutdown request
+2024-05-30 15:28:57.315 CEST [7984] LOG:  background worker "logical replication launcher" (PID 7990) exited with exit code 1
+2024-05-30 15:28:57.315 CEST [7985] LOG:  shutting down
+2024-05-30 15:28:57.316 CEST [7985] LOG:  checkpoint starting: shutdown immediate
+2024-05-30 15:28:57.324 CEST [7985] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.003 s, sync=0.001 s, total=0.008 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=242 kB; lsn=0/154F1D8, redo lsn=0/154F1D8
+2024-05-30 15:28:57.329 CEST [7984] LOG:  database system is shut down

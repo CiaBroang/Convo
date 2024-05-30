@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import './SignInPage.css';
+import { useNavigate } from 'react-router-dom';
+
 
 interface User {
   email: string;
@@ -11,9 +13,10 @@ const SignInPage: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  const navigate = useNavigate();
 
-  // Flytta handleAddUser utanför handleSubmit
-  const handleAddUser = async (newUser: User) => {
+  
+  const handleUser = async (newUser: User) => {
     try {
       const response = await fetch("http://localhost:8000/addUsers/", {
         method: "POST",
@@ -30,7 +33,10 @@ const SignInPage: React.FC = () => {
 
       if (response.ok) {
         console.log("User added successfully");
-        // Uppdatera tillstånd eller visa meddelande till användaren här
+        navigate('/messages');
+      } else if (response.status === 409) {
+        console.log("User already exists, logging in");
+        navigate('/messages'); 
       } else {
         console.error(`Error encountered adding user, status code: ${response.status}`);
       }
@@ -48,8 +54,8 @@ const SignInPage: React.FC = () => {
       email
     };
 
-    handleAddUser(newUser);
-    console.log("Form submitted");
+    handleUser(newUser);
+    console.log("User added to the database");
   };
 
   return (
@@ -61,7 +67,6 @@ const SignInPage: React.FC = () => {
           className="input"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          required
         />
         <input
           type="text"
@@ -86,3 +91,9 @@ const SignInPage: React.FC = () => {
 };
 
 export default SignInPage;
+
+
+// Lägg till en bild ovanför inputfälten
+// Gå vidare till nästa sida när användaren har loggat in
+// Gör en till sida för användare som redan finns och checka deras namn + lösenord med databasen
+// Använd user_id för att hämta alla meddelanden på nästa sida, message page ska bara rendera meddelanden från rätt användare
