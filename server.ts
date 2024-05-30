@@ -3,6 +3,10 @@ import cors from "cors";
 import dotenv from "dotenv"; //hantera miljövariabler från .env-filen
 import { Client } from "pg"; //skapar en PostgreSQL-klient
 import bodyParser from "body-parser" //hantera POST-data
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+
+const SECRET_KEY = "123"; 
 
 
 dotenv.config(); // Läs in konfigurationen från .env-filen och gör den tillgänglig via process.env
@@ -68,21 +72,35 @@ app.post("/messages", async (req: Request, res: Response) => {
   }
 });
 
-
 app.post("/addUsers", async (req: Request, res: Response) => {
   const { email, password, username } = req.body;
 
   if (!email || !password) {
     return res.status(400).send("email and password are required");
   }
-  // Validera för att meddelandet innehåller någonting!
-
+  
   try {
-    await client.query(
-      "INSERT INTO users (email, password, username) VALUES ($1, $2, $3)",
-      [email, password, username]
+    const userCheck = await client.query(
+      "SELECT * FROM users WHERE email = $1",
+      [email]
     );
-    res.status(201).send("User added");
+
+    if (userCheck.rows.length > 0) {
+      return res.status(409).send("User already exists");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10); 
+
+    const result = await client.query(
+      "INSERT INTO users (email, password, username) VALUES ($1, $2, $3) RETURNING user_id",
+      [email, hashedPassword, username]
+    );
+
+    const userId = result.rows[0].user_id;
+
+    const token = jwt.sign({ id: userId }, SECRET_KEY, { expiresIn: '1h' });
+    res.status(201).json({ token });
+
   } catch (err) {
     if (err instanceof Error) {
       console.error("Error adding user ", err.message);
@@ -93,8 +111,6 @@ app.post("/addUsers", async (req: Request, res: Response) => {
     }
   }
 });
-
-
 
 app.listen(8000, () => {
   console.log("Server is running on http://localhost:8000");
