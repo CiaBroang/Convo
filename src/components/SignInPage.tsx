@@ -94,6 +94,4 @@ export default SignInPage;
 
 
 // Lägg till en bild ovanför inputfälten
-// Gå vidare till nästa sida när användaren har loggat in
-// Gör en till sida för användare som redan finns och checka deras namn + lösenord med databasen
 // Använd user_id för att hämta alla meddelanden på nästa sida, message page ska bara rendera meddelanden från rätt användare
