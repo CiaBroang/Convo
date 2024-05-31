@@ -112,6 +112,24 @@ app.post("/addUsers", async (req: Request, res: Response) => {
   }
 });
 
+
+app.get("/messages/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const result = await client.query(
+      "SELECT * FROM messages WHERE sender_id = $1 OR receiver_id = $1",
+      [userId]
+    );
+
+    res.json({ messages: result.rows });
+  } catch (err) {
+    console.error("Error fetching messages", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
 app.listen(8000, () => {
   console.log("Server is running on http://localhost:8000");
 });

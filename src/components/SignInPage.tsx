@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import './SignInPage.css';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../context/UserContext';
 
 
 interface User {
@@ -14,6 +15,8 @@ const SignInPage: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const navigate = useNavigate();
+  const { setUser } = useUser();
+  
 
   
   const handleUser = async (newUser: User) => {
@@ -32,9 +35,15 @@ const SignInPage: React.FC = () => {
       });
 
       if (response.ok) {
+        const data = await response.json()
+        localStorage.setItem('token', data.token);
+        setUser({ token: data.token });
         console.log("User added successfully");
         navigate('/messages');
       } else if (response.status === 409) {
+        const data = await response.json()
+        localStorage.setItem('token', data.token);
+        setUser({ token: data.token });
         console.log("User already exists, logging in");
         navigate('/messages'); 
       } else {
