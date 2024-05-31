@@ -29,6 +29,18 @@ VALUES ('johndoeee@example.com', 'password12345', 'johndoee', 'John Doee', FALSE
 INSERT INTO users (email, password, username, name, is_online)
 VALUES ('jaaanedoe@example.com', 'password123456', 'jaanedoe', 'Jaane Doe', FALSE);
 
+INSERT INTO messages (sender_id, receiver_id, message_text)
+VALUES ('ac1cc4fc-1f93-4a4c-859d-e8423673f0be', '4b65532d-e473-42ac-aa23-0a6adff4c6ae', 'How are you?');
+
+INSERT INTO messages (sender_id, receiver_id, message_text)
+VALUES ('f2c198c3-a9d4-4ad9-a3f1-3b7bdb825300', '4b65532d-e473-42ac-aa23-0a6adff4c6ae', 'Yes!');
+
+INSERT INTO messages (sender_id, receiver_id, message_text)
+VALUES ('088e7329-e538-4161-80a5-36b896519f03', '4b65532d-e473-42ac-aa23-0a6adff4c6ae', 'I think so');
+
+INSERT INTO messages (sender_id, receiver_id, message_text)
+VALUES ('42a57bb1-4592-4f23-8e6a-6c5759416ebf', '4b65532d-e473-42ac-aa23-0a6adff4c6ae', 'haha cool, see you later');
+
 
 -- DROP TABLE IF EXISTS users;
 -- DROP TABLE IF EXISTS messages;
