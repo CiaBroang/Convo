@@ -1,21 +1,34 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface UserContextType {
-  user: { token: string | null };
-  setUser: React.Dispatch<React.SetStateAction<{ token: string | null }>>;
+  //definiera ett typescript interface
+  user: {
+    id: string | null; //user som objekt
+  };
+  setUser: React.Dispatch<
+    React.SetStateAction<{
+      //setUser: en funktion för att uppdatera user-objektet.
+      id: string | null;
+    }>
+  >;
 }
 
-const UserContext = createContext<UserContextType | null>(null);
+const UserContext = createContext<UserContextType | null>(null); // Skapar UserContext med initialt värde null
 
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<{ token: string | null }>({
-    token: localStorage.getItem('token'),
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ // UserProvider-komponent som levererar användarens data till children
+  children,
+}) => {
+  const [user, setUser] = useState<{ id: string | null }>({
+    id: null,
   });
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setUser({ token });
+    const localUser = localStorage.getItem("user");
+    if (localUser === null) throw new Error('Local storage has no user!');
+    const userId = JSON.parse(localUser).userId;
+    console.log("Fetched user ID from localStorage:", localUser);
+    if (localUser) {
+      setUser({ id: userId });
     }
   }, []);
 

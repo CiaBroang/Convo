@@ -3,7 +3,6 @@ import './SignInPage.css';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 
-
 interface User {
   email: string;
   password: string;
@@ -16,9 +15,7 @@ const SignInPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const navigate = useNavigate();
   const { setUser } = useUser();
-  
 
-  
   const handleUser = async (newUser: User) => {
     try {
       const response = await fetch("http://localhost:8000/addUsers/", {
@@ -35,15 +32,15 @@ const SignInPage: React.FC = () => {
       });
 
       if (response.ok) {
-        const data = await response.json()
-        localStorage.setItem('token', data.token);
-        setUser({ token: data.token });
+        const data = await response.json();
+        localStorage.setItem('user', JSON.stringify(data));
+        setUser(data);
         console.log("User added successfully");
         navigate('/messages');
       } else if (response.status === 409) {
-        const data = await response.json()
-        localStorage.setItem('token', data.token);
-        setUser({ token: data.token });
+        const data = await response.json();
+        localStorage.setItem('user', JSON.stringify(data));
+        setUser(data);
         console.log("User already exists, logging in");
         navigate('/messages'); 
       } else {
@@ -100,7 +97,3 @@ const SignInPage: React.FC = () => {
 };
 
 export default SignInPage;
-
-
-// Lägg till en bild ovanför inputfälten
-// Använd user_id för att hämta alla meddelanden på nästa sida, message page ska bara rendera meddelanden från rätt användare
