@@ -3,7 +3,6 @@ import cors from "cors";
 import dotenv from "dotenv"; //hantera miljövariabler från .env-filen
 import { Client } from "pg"; //skapar en PostgreSQL-klient
 import bodyParser from "body-parser" //hantera POST-data
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
 const SECRET_KEY = "123"; 
@@ -84,9 +83,13 @@ app.post("/addUsers", async (req: Request, res: Response) => {
       "SELECT * FROM users WHERE email = $1",
       [email]
     );
+    console.log(userCheck)
+    console.log(userCheck.rows.length)
+    // Kasta error om flera users med samma email!
 
-    if (userCheck.rows.length > 0) {
-      return res.status(409).send("User already exists");
+    if (userCheck.rows.length === 1) {
+      const userId = userCheck.rows[0].user_id;
+      return res.status(200).json({ userId });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10); 
@@ -97,9 +100,7 @@ app.post("/addUsers", async (req: Request, res: Response) => {
     );
 
     const userId = result.rows[0].user_id;
-
-    const token = jwt.sign({ id: userId }, SECRET_KEY, { expiresIn: '1h' });
-    res.status(201).json({ token });
+    res.status(201).json({ userId }); 
 
   } catch (err) {
     if (err instanceof Error) {
@@ -112,23 +113,27 @@ app.post("/addUsers", async (req: Request, res: Response) => {
   }
 });
 
-
-app.get("/messages/:userId", async (req, res) => {
-  const { userId } = req.params;
+app.get("/conversations/:userId", async (req: Request, res: Response) => {
+  const userId = req.params.userId;
 
   try {
-    const result = await client.query(
-      "SELECT * FROM messages WHERE sender_id = $1 OR receiver_id = $1",
+    const pgRes = await client.query(
+      "SELECT * FROM messages WHERE sender_id=$1 OR receiver_id=$1",
       [userId]
     );
 
-    res.json({ messages: result.rows });
-  } catch (err) {
-    console.error("Error fetching messages", err);
+    const conversations = pgRes.rows.map(row => ({
+      name: row.sender_id === userId ? row.receiver_id : row.sender_id,
+      lastMessage: row.message_text,
+      sentAt: row.sent_at
+    }));
+
+    res.send({ conversations });
+  } catch (error) {
+    console.error("Error fetching conversations", error);
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 app.listen(8000, () => {
   console.log("Server is running on http://localhost:8000");
