@@ -24,7 +24,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ // UserP
 
   useEffect(() => {
     const localUser = localStorage.getItem("user");
-    if (localUser === null) throw new Error('Local storage has no user!');
+    if (localUser === null) return setUser({ id: null });
     const userId = JSON.parse(localUser).userId;
     console.log("Fetched user ID from localStorage:", localUser);
     if (localUser) {
