@@ -34,15 +34,9 @@ const SignInPage: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('user', JSON.stringify(data));
-        setUser(data);
+        setUser({ id: data.userId });
         console.log("User added successfully");
         navigate('/messages');
-      } else if (response.status === 409) {
-        const data = await response.json();
-        localStorage.setItem('user', JSON.stringify(data));
-        setUser(data);
-        console.log("User already exists, logging in");
-        navigate('/messages'); 
       } else {
         console.error(`Error encountered adding user, status code: ${response.status}`);
       }
