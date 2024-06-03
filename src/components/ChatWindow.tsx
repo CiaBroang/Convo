@@ -3,7 +3,7 @@ import ChatBubble from "./ChatBubble";
 import "./ChatWindow.css";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useChat } from '../context/ChatContext';
-import { useUser } from '../context/UserContext';
+// import { useUser } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 // import express, { Request, Response } from "express";
 
@@ -20,7 +20,7 @@ interface Message {
 
 const ChatWindow: React.FC = () => {
   const { selectedConversation } = useChat();
-  const { user } = useUser();
+  // const { user } = useUser();
   const navigate = useNavigate();
 
   const goBack = () => {
@@ -32,6 +32,14 @@ const ChatWindow: React.FC = () => {
   >([]);
 
   const [newMessage, setNewMessage] = useState<string>(""); //State-variabeln (newMessage): Håller en sträng som representerar det aktuella textinnehållet i ett inputfält.Setter-funktionen (setNewMessage): Uppdaterar newMessage när användaren skriver in text i inputfältet.
+  const [username, setUsername] = useState<string>("");
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("conversationName");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
 
   useEffect(() => {
     if (selectedConversation) {
@@ -122,8 +130,7 @@ const ChatWindow: React.FC = () => {
             <div className="avatar-circle"></div>
             <div className="active-badge"></div>
           </div>
-          <span className="chat-username">Cia Broang</span>
-          {/* Hämta {userName} */}
+          <span className="chat-username">{username}</span>
         </div>
       </div>
       <div className="chat-content">
