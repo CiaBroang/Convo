@@ -74,6 +74,7 @@ const MessagesPage: React.FC = () => {
   const [conversations, setConversations] = useState<
     ConversationPreviewProps[]
   >([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     const fetchConversations = async () => {
@@ -116,14 +117,20 @@ const MessagesPage: React.FC = () => {
     }
   };
 
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
   const latestConversations = conversations
     .sort((a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime())
     .filter(
-      (conv, index, self) =>
-        index ===
-        self.findIndex((t) => t.conversationId === conv.conversationId)
+      (conv, index, self) => {
+        const fitsFilter = searchTerm ? conv.name.toLowerCase().includes(searchTerm.toLowerCase()) : true;
+        const isFirstOccurence = index === self.findIndex((t) => t.conversationId === conv.conversationId)
+        return fitsFilter && isFirstOccurence;
+      }
     );
-
+    
   return (
     <div className="messages-page">
       <div className="header">
@@ -131,7 +138,12 @@ const MessagesPage: React.FC = () => {
       </div>
       <div className="search-bar">
         <CiSearch className="search-icon" />
-        <input type="text" placeholder="Search..." />
+        <input 
+          type="text"
+          placeholder="Search..."
+          value={searchTerm}
+          onChange={handleSearchInputChange}
+        />
       </div>
       <div className="conversations-list">
         {latestConversations.map((conv, index) => (

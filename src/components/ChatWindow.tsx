@@ -63,7 +63,6 @@ const ChatWindow: React.FC = () => {
         );
         if (response.ok) {
           const data: Message[] = await response.json();
-          console.log("Fetched messages:", data);
           setMessages(
             data.map((msg) => {
               return {
@@ -120,7 +119,7 @@ const ChatWindow: React.FC = () => {
     }
   };
 
-
+  if (!selectedConversation) return null;
   return (
     <div className="chat-window">
       <div className="chat-header">
@@ -134,9 +133,11 @@ const ChatWindow: React.FC = () => {
         </div>
       </div>
       <div className="chat-content">
-        {messages.map((msg, index) => (
-          <ChatBubble key={index} message={msg.message} user={selectedConversation && msg.usertype === selectedConversation.senderId ? "sender" : "receiver"} timestamp={msg.timestamp} />
-        ))}
+        {messages.map((msg, index) => 
+          (
+            <ChatBubble key={index} message={msg.message} user={msg.usertype} timestamp={msg.timestamp} />
+          )
+        )}
       </div>
       <div className="chat-input">
         <textarea
