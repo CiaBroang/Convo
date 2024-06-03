@@ -125,13 +125,29 @@ app.get("/conversations/:userId", async (req: Request, res: Response) => {
   try {
     const pgRes = await client.query(
       // "SELECT * FROM messages WHERE sender_id=$1 OR receiver_id=$1",
-      "SELECT m.*, u.username AS other_username FROM messages m JOIN users u ON (m.sender_id = u.user_id OR m.receiver_id = u.user_id) WHERE m.sender_id=$1 OR m.receiver_id=$1",
+      `
+      SELECT m.*, 
+             CASE 
+               WHEN m.sender_id = $1 THEN u2.username 
+               ELSE u1.username 
+             END AS username,
+             CASE 
+               WHEN m.sender_id = $1 THEN u2.user_id 
+               ELSE u1.user_id 
+             END AS other_user_id
+      FROM messages m
+      JOIN users u1 ON m.sender_id = u1.user_id
+      JOIN users u2 ON m.receiver_id = u2.user_id
+      WHERE m.sender_id = $1 OR m.receiver_id = $1
+      `,
       [userId]
     );
 
     const conversations = pgRes.rows.map(row => ({
-      name: row.sender_id === userId ? row.receiver_id : row.sender_id,
+      // conversationId: row.sender_id === userId ? row.receiver_id : row.sender_id,
+      conversationId: row.other_user_id,
       lastMessage: row.message_text,
+      name: row.username,
       sentAt: row.sent_at
     }));
 

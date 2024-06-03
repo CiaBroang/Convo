@@ -6,10 +6,10 @@ import { useUser } from "../context/UserContext";
 import { useChat } from "../context/ChatContext";
 
 interface ConversationPreviewProps {
+  conversationId: string;
   name: string;
   lastMessage: string;
   sentAt: string;
-  receiverId?: string;
 }
 
 const ConversationPreview: React.FC<ConversationPreviewProps> = ({
@@ -105,9 +105,13 @@ const MessagesPage: React.FC = () => {
     }
   }, [user.id]);
 
-  const handleConversationClick = (name: string) => {
-    if (user.id && name) {
-      setSelectedConversation({ senderId: user.id, receiverId: name });
+  const handleConversationClick = (conversationId: string, conversationName: string) => {
+    if (user.id && conversationId) {
+      setSelectedConversation({
+        senderId: user.id,
+        receiverId: conversationId,
+      });
+      localStorage.setItem("conversationName", conversationName);
       navigate(`/chat`);
     }
   };
@@ -116,7 +120,8 @@ const MessagesPage: React.FC = () => {
     .sort((a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime())
     .filter(
       (conv, index, self) =>
-        index === self.findIndex((t) => t.name === conv.name)
+        index ===
+        self.findIndex((t) => t.conversationId === conv.conversationId)
     );
 
   return (
@@ -130,13 +135,16 @@ const MessagesPage: React.FC = () => {
       </div>
       <div className="conversations-list">
         {latestConversations.map((conv, index) => (
-          <div key={index} onClick={() => handleConversationClick(conv.name)}>
+          <div
+            key={index}
+            onClick={() => handleConversationClick(conv.conversationId, conv.name)}
+          >
             <ConversationPreview
+              conversationId={conv.conversationId}
               name={conv.name}
               lastMessage={conv.lastMessage}
               sentAt={conv.sentAt}
             />
-            {/* filtrera bort alla som inte är det senaste meddelandet  */}
           </div>
         ))}
       </div>
