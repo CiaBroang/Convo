@@ -5,7 +5,6 @@ import { Client } from "pg"; //skapar en PostgreSQL-klient
 import bodyParser from "body-parser" //hantera POST-data
 import bcrypt from "bcryptjs";
 
-const SECRET_KEY = "123"; 
 
 
 dotenv.config(); // Läs in konfigurationen från .env-filen och gör den tillgänglig via process.env
@@ -21,6 +20,8 @@ client.connect().catch((err) => {
 const app = express(); //ny instans av express-applikationen
 app.use(cors()); //förhindra CORS-fel
 app.use(bodyParser.json());
+
+
 
 app.get("/fetchConversation", async (req: Request, res: Response) => {
   const { person1, person2 } = req.query;
@@ -44,6 +45,7 @@ app.get("/fetchConversation", async (req: Request, res: Response) => {
     }
   }
 });
+
 
 
 app.post("/messages", async (req: Request, res: Response) => {
@@ -70,6 +72,8 @@ app.post("/messages", async (req: Request, res: Response) => {
     }
   }
 });
+
+
 
 app.post("/addUsers", async (req: Request, res: Response) => {
   const { email, password, username } = req.body;
@@ -113,12 +117,15 @@ app.post("/addUsers", async (req: Request, res: Response) => {
   }
 });
 
+
+
 app.get("/conversations/:userId", async (req: Request, res: Response) => {
   const userId = req.params.userId;
 
   try {
     const pgRes = await client.query(
-      "SELECT * FROM messages WHERE sender_id=$1 OR receiver_id=$1",
+      // "SELECT * FROM messages WHERE sender_id=$1 OR receiver_id=$1",
+      "SELECT m.*, u.username AS other_username FROM messages m JOIN users u ON (m.sender_id = u.user_id OR m.receiver_id = u.user_id) WHERE m.sender_id=$1 OR m.receiver_id=$1",
       [userId]
     );
 

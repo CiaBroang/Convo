@@ -5,12 +5,12 @@
     border-radius: 10px;
   }
   
-  .chat-bubble.user {
+  .chat-bubble.sender {
     background-color: #dcffef;
     align-self: flex-end;
   }
   
-  .chat-bubble.bot {
+  .chat-bubble.receiver {
     background-color: #f5f5f5;
     align-self: flex-start;
   }
