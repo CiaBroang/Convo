@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import ChatBubble from "./ChatBubble";
 import "./ChatWindow.css";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { useChat } from '../context/ChatContext';
+import { useUser } from '../context/UserContext';
+import { useNavigate } from 'react-router-dom';
 // import express, { Request, Response } from "express";
 
 interface Message {
@@ -9,23 +12,31 @@ interface Message {
   message_text?: string; //  ? betyder att det är valfritt för interface feature i typescript
   message_image?: Uint8Array; // Valfritt
   message_gif?: Uint8Array; // Valfritt
-  sender_id: number;
-  receiver_id: number;
+  sender_id: string;
+  receiver_id: string;
   sent_at: string;
+  username: string;
 }
 
 const ChatWindow: React.FC = () => {
-  // Ska vara props sen!
-  const senderId = 1;
-  const receiverId = 2;
+  const { selectedConversation } = useChat();
+  const { user } = useUser();
+  const navigate = useNavigate();
+
+  const goBack = () => {
+    navigate('/messages');
+  }
 
   const [messages, setMessages] = useState<
-    { message: string; sender: "user" | "receiver"; timestamp: string }[]
+    { message: string; usertype: "sender" | "receiver"; timestamp: string; userName: string }[]
   >([]);
 
   const [newMessage, setNewMessage] = useState<string>(""); //State-variabeln (newMessage): Håller en sträng som representerar det aktuella textinnehållet i ett inputfält.Setter-funktionen (setNewMessage): Uppdaterar newMessage när användaren skriver in text i inputfältet.
 
   useEffect(() => {
+    if (selectedConversation) {
+      const { senderId, receiverId } = selectedConversation;
+
     const fetchMessages = async () => {
       try {
         const response = await fetch(
@@ -49,8 +60,9 @@ const ChatWindow: React.FC = () => {
             data.map((msg) => {
               return {
                 message: msg.message_text || "",
-                sender: msg.sender_id === senderId ? "user" : "receiver",
+                usertype: msg.sender_id === senderId ? "sender" : "receiver",
                 timestamp: msg.sent_at,
+                userName: msg.username
               };
             })
           );
@@ -60,10 +72,14 @@ const ChatWindow: React.FC = () => {
       }
     };
     fetchMessages();
-  }, []);
+    }
+  }, [selectedConversation]);
 
   const handleSend = async () => {
-    if (newMessage === "") return; //om meddelandet är tomt vill jag inte kunna skicka något meddelande
+    if (newMessage === "" || !selectedConversation) return; //om meddelandet är tomt vill jag inte kunna skicka något meddelande
+
+    const { senderId, receiverId } = selectedConversation;
+
     const response = await fetch("http://localhost:8000/messages/", {
       method: "POST",
       mode: "cors",
@@ -85,7 +101,7 @@ const ChatWindow: React.FC = () => {
     if (response.ok) {
       setMessages([
         ...messages,
-        { message: newMessage, sender: "user", timestamp: "" },
+        { message: newMessage, usertype: "sender", timestamp: "", userName: "" },
       ]); // Lös så att timestamp också visas upp. Spridningsoperatorn (...messages) används för att kopiera alla befintliga meddelanden i messages-arrayen och lägga till ett nytt objektt
       setNewMessage(""); //återställ inputfältet
     } else {
@@ -96,22 +112,23 @@ const ChatWindow: React.FC = () => {
     }
   };
 
+
   return (
     <div className="chat-window">
       <div className="chat-header">
-      <FaArrowLeftLong className="back-icon" />
+      <FaArrowLeftLong onClick={goBack} className="back-icon" />
         <div className="chat-header-details">
           <div className="avatar-container">
             <div className="avatar-circle"></div>
             <div className="active-badge"></div>
           </div>
           <span className="chat-username">Cia Broang</span>
+          {/* Hämta {userName} */}
         </div>
       </div>
       <div className="chat-content">
         {messages.map((msg, index) => (
-          // <ChatBubble key={index} message={msg.message} isSender={msg.sender === senderId} sender={msg.sender}
-          <ChatBubble key={index} message={msg.message} sender={msg.sender} /> //lägg till på nått sätt: timestamp={msg.timestamp}
+          <ChatBubble key={index} message={msg.message} user={selectedConversation && msg.usertype === selectedConversation.senderId ? "sender" : "receiver"} timestamp={msg.timestamp} />
         ))}
       </div>
       <div className="chat-input">

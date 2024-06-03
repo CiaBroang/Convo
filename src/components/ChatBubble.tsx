@@ -3,13 +3,15 @@ import './ChatBubble.css';
 
 interface ChatBubbleProps {
   message: string;
-  sender: 'user' | 'receiver';
+  user: 'sender' | 'receiver';
+  timestamp: string;
 }
 
-const ChatBubble: React.FC<ChatBubbleProps> = ({ message, sender }) => {
+const ChatBubble: React.FC<ChatBubbleProps> = ({ message, user, timestamp }) => {
   return (
-    <div className={`chat-bubble ${sender}`}>
+    <div className={`chat-bubble ${user}`}>
       <p>{message}</p>
+      <p>{timestamp}</p>
     </div>
   );
 };
