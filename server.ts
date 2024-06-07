@@ -1,15 +1,13 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
-import dotenv from "dotenv"; //hantera miljövariabler från .env-filen
-import { Client } from "pg"; //skapar en PostgreSQL-klient
-import bodyParser from "body-parser" //hantera POST-data
+import dotenv from "dotenv"; 
+import { Client } from "pg"; 
+import bodyParser from "body-parser"
 import bcrypt from "bcryptjs";
 
+dotenv.config();
 
-
-dotenv.config(); // Läs in konfigurationen från .env-filen och gör den tillgänglig via process.env
-
-const client = new Client({ //// Skapa en ny instans av en PostgreSQL-klient med anslutningssträngen från .env-filen
+const client = new Client({ // Skapa en ny instans av en PostgreSQL-klient med anslutningssträngen från .env-filen
   connectionString: process.env.PGURI,
 });
 
@@ -17,7 +15,7 @@ client.connect().catch((err) => {
   console.error("Error connecting to the database", err.stack);
 });
 
-const app = express(); //ny instans av express-applikationen
+const app = express(); 
 app.use(cors()); //förhindra CORS-fel
 app.use(bodyParser.json());
 
@@ -54,7 +52,7 @@ app.post("/messages", async (req: Request, res: Response) => {
   if (!sender_id || !receiver_id) {
     return res.status(400).send("sender_id, receiver_id are required");
   }
-  // Validera för att meddelandet innehåller någonting!
+  // Add validation, that the message contains something
 
   try {
     await client.query(
@@ -89,7 +87,7 @@ app.post("/addUsers", async (req: Request, res: Response) => {
     );
     console.log(userCheck)
     console.log(userCheck.rows.length)
-    // Kasta error om flera users med samma email!
+    // Add error if user email already exists
 
     if (userCheck.rows.length === 1) {
       const userId = userCheck.rows[0].user_id;
@@ -124,7 +122,7 @@ app.get("/conversations/:userId", async (req: Request, res: Response) => {
 
   try {
     const pgRes = await client.query(
-      // "SELECT * FROM messages WHERE sender_id=$1 OR receiver_id=$1",
+      // query to get info from both tables (messages and users, m and u)
       `
       SELECT m.*, 
              CASE 
@@ -144,7 +142,6 @@ app.get("/conversations/:userId", async (req: Request, res: Response) => {
     );
 
     const conversations = pgRes.rows.map(row => ({
-      // conversationId: row.sender_id === userId ? row.receiver_id : row.sender_id,
       conversationId: row.other_user_id,
       lastMessage: row.message_text,
       name: row.username,

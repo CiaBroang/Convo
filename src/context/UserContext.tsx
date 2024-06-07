@@ -1,21 +1,19 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface UserContextType {
-  //definiera ett typescript interface
   user: {
-    id: string | null; //user som objekt
+    id: string | null;
   };
   setUser: React.Dispatch<
     React.SetStateAction<{
-      //setUser: en funktion för att uppdatera user-objektet.
       id: string | null;
     }>
   >;
 }
 
-const UserContext = createContext<UserContextType | null>(null); // Skapar UserContext med initialt värde null
+const UserContext = createContext<UserContextType | null>(null);
 
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ // UserProvider-komponent som levererar användarens data till children
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<{ id: string | null }>({

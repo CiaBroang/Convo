@@ -21,7 +21,7 @@ const App: React.FC = () => {
 
 const AppContent: React.FC = () => {
   const location = useLocation();
-  const shouldShowLogOut = location.pathname !== '/chat'; // Kontrollera om sökvägen inte är /chat pga ingen log out knapp där
+  const shouldShowLogOut = location.pathname !== '/chat';
 
   return (
     <>

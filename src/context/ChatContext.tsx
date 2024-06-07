@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react"; //ReactNode är en praktisk typ som används för att beskriva vad en React-komponent kan rendera.
+import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface ChatContextType {
   selectedConversation: { senderId: string; receiverId: string } | null;

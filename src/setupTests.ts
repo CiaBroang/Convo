@@ -4,9 +4,11 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
-//Kanske borde lägga till ett konversations ID
-//Timestamp syns inte direkt när ett meddelande skickas i chatten
-//Gör det möjligt att skicka attachments
-//Gör det möjligt att skicka GIFs
-//Gör det möjligt att skicka emojis
-// Lägg till gå-tillbaka knappar med history.goBack()
+// TO DO LIST
+// Maybe add a conversation ID
+// Timestamp is not directly visible when a message is sent in the chat
+// Make it possible to send attachments
+// Make it possible to send GIFs
+// Make it possible to send emojis
+// Add active user logic, column exists in database
+// Add go-back buttons with history.goBack()

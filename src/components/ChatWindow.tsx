@@ -3,15 +3,14 @@ import ChatBubble from "./ChatBubble";
 import "./ChatWindow.css";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useChat } from '../context/ChatContext';
-// import { useUser } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
-// import express, { Request, Response } from "express";
+
 
 interface Message {
   message_id: number;
-  message_text?: string; //  ? betyder att det är valfritt för interface feature i typescript
-  message_image?: Uint8Array; // Valfritt
-  message_gif?: Uint8Array; // Valfritt
+  message_text?: string; 
+  message_image?: Uint8Array; // Optional, add functionality
+  message_gif?: Uint8Array; // Optional, add functionality
   sender_id: string;
   receiver_id: string;
   sent_at: string;
@@ -20,7 +19,6 @@ interface Message {
 
 const ChatWindow: React.FC = () => {
   const { selectedConversation } = useChat();
-  // const { user } = useUser();
   const navigate = useNavigate();
 
   const goBack = () => {
@@ -83,7 +81,7 @@ const ChatWindow: React.FC = () => {
   }, [selectedConversation]);
 
   const handleSend = async () => {
-    if (newMessage === "" || !selectedConversation) return; //om meddelandet är tomt vill jag inte kunna skicka något meddelande
+    if (newMessage === "" || !selectedConversation) return; 
 
     const { senderId, receiverId } = selectedConversation;
 
@@ -109,10 +107,10 @@ const ChatWindow: React.FC = () => {
       setMessages([
         ...messages,
         { message: newMessage, usertype: "sender", timestamp: "", userName: "" },
-      ]); // Lös så att timestamp också visas upp. Spridningsoperatorn (...messages) används för att kopiera alla befintliga meddelanden i messages-arrayen och lägga till ett nytt objektt
-      setNewMessage(""); //återställ inputfältet
+      ]);
+      setNewMessage("");
     } else {
-      // Visa error för användare!
+      // Add error message towards user
       console.error(
         `Error encountered posting message, status code: ${response.status}`
       );
